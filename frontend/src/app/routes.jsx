@@ -16,9 +16,9 @@ export const router = createBrowserRouter([
                 path: "*",
                 element: (
                     <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 px-6">
-                        <h1 className="text-4xl font-black text-[#1E1E1E]">404</h1>
-                        <p className="text-lg text-[#485E57]">Page not found.</p>
-                        <Link to="/" className="font-semibold text-[#485E57] underline hover:text-[#2F3F3A]">
+                        <h1 className="text-4xl font-black text-[#1A1A1A]">404</h1>
+                        <p className="text-lg text-[#1A1A1A]">Page not found.</p>
+                        <Link to="/" className="font-semibold text-[#5A6B7A ] underline hover:text-[#005FCC ]">
                             Back to Home
                         </Link>
                     </div>

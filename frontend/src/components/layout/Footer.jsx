@@ -31,7 +31,7 @@ const socials = ["Twitter", "Facebook", "LinkedIn", "Instagram"];
 
 export default function Footer() {
     return (
-        <footer className="w-full bg-[#F2F2F2] text-[#485E57]">
+        <footer className="w-full bg-[#061A2D ] text-[#1A1A1A]">
             <div className="mx-auto w-full max-w-6xl px-6 py-16">
                 <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1.2fr]">
                     {/* Brand */}
@@ -46,7 +46,7 @@ export default function Footer() {
                                 <a
                                     key={social}
                                     href="#"
-                                    className="rounded text-sm font-semibold hover:text-[#2F3E39] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#485E57]/40"
+                                    className="rounded text-sm font-semibold hover:text-[#005FCC] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#007BFF ]/40"
                                 >
                                     {social}
                                 </a>
@@ -59,14 +59,14 @@ export default function Footer() {
                         {footerColumns.map((col) => (
                             <div key={col.title}>
                                 <h3 className="text-lg font-bold tracking-wide">{col.title}</h3>
-                                <div className="mt-3 h-px w-28 bg-[#485E57]/30" />
+                                <div className="mt-3 h-px w-28 bg-[#061A2D]/30" />
 
                                 <ul className="mt-4 space-y-3">
                                     {col.links.map((link) => (
                                         <li key={link.label}>
                                             <a
                                                 href={link.href}
-                                                className="inline-flex items-center rounded text-sm font-semibold text-[#485E57]/90 underline decoration-transparent underline-offset-4 hover:text-[#2F3E39] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#485E57]/40"
+                                                className="inline-flex items-center rounded text-sm font-semibold text-[#5A6B7A ]/90 underline decoration-transparent underline-offset-4 hover:text-[#005FCC ] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[##E2E8F0]/40"
                                             >
                                                 {link.label}
                                             </a>
@@ -79,12 +79,12 @@ export default function Footer() {
                         {/* Address */}
                         <div>
                             <h3 className="text-lg font-bold tracking-wide">Address</h3>
-                            <div className="mt-3 h-px w-28 bg-[#485E57]/30" />
+                            <div className="mt-3 h-px w-28 bg-[#061A2D]/30" />
 
-                            <div className="mt-4 space-y-3 text-sm font-medium text-[#485E57]/90">
+                            <div className="mt-4 space-y-3 text-sm font-medium text-[#1A1A1A]/90">
                                 {address.map((row) => (
                                     <p key={row.label}>
-                                        <span className="font-bold text-[#485E57]">
+                                        <span className="font-bold text-[#1A1A1A]">
                                             {row.label}:
                                         </span>{" "}
                                         {row.value}
@@ -96,24 +96,24 @@ export default function Footer() {
                 </div>
 
                 {/* Divider */}
-                <div className="mt-14 h-px w-full bg-[#485E57]/30" />
+                <div className="mt-14 h-px w-full bg-[#061A2D]/30" />
 
                 {/* Bottom */}
                 <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm md:flex-row">
-                    <p className="text-[#485E57]/80">
+                    <p className="text-[#1A1A1A]/80">
                         © {new Date().getFullYear()} MediSearch. All rights reserved.
                     </p>
 
                     <div className="flex items-center gap-6">
                         <a
                             href="#"
-                            className="inline-flex rounded text-sm font-semibold text-[#485E57]/90 underline decoration-transparent underline-offset-4 hover:text-[#2F3E39] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#485E57]/40"
+                            className="inline-flex rounded text-sm font-semibold text-[#1A1A1A]/90 underline decoration-transparent underline-offset-4 hover:text-[#2F3E39] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#485E57]/40"
                         >
                             Privacy
                         </a>
                         <a
                             href="#"
-                            className="inline-flex rounded text-sm font-semibold text-[#485E57]/90 underline decoration-transparent underline-offset-4 hover:text-[#2F3E39] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#485E57]/40"
+                            className="inline-flex rounded text-sm font-semibold text-[#1A1A1A]/90 underline decoration-transparent underline-offset-4 hover:text-[#2F3E39] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#485E57]/40"
                         >
                             Terms
                         </a>
