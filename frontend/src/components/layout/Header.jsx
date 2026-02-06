@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import logo from "../../assets/logo/logoHeader.png"
+import logo from "../../assets/logo/logo.png"
 
 const Header = () => {
     const [open, setOpen] = useState(false);
