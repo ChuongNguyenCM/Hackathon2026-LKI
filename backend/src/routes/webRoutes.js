@@ -1,8 +1,10 @@
 import express from "express";
+import { handleReservation } from "../controllers/webController";
 
 const router = express.Router();
 
 const webRoutes = (app) => {
+    router.post("/reservations", handleReservation);
 
     return app.use("/api", router);
 }
