@@ -1,0 +1,44 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: hackathon_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hackathon_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+
+      # IMPORTANT: your backend reads process.env.MONGODB_CONNECTION
+      - MONGODB_CONNECTION=mongodb://mongo:27017/hackathon
+
+      # CORS in src/server.js
+      - CORS_ORIGIN=http://localhost:5173
+
+      # Gemini
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=gemini-flash-latest
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hackathon_frontend
+    ports:
+      # map nginx 80 -> host 5173 to match your CORS + mental model
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
