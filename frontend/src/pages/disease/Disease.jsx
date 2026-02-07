@@ -27,9 +27,21 @@ export default function Disease() {
 
     // Filter
     const visibleDiseases = useMemo(() => {
-        if (!aiResult?.matchedDiseaseIds?.length) return diseases;
-        const setIds = new Set(aiResult.matchedDiseaseIds);
-        return diseases.filter((d) => setIds.has(d._id));
+        // If AI returns scored results => show in that order
+        if (aiResult?.results?.length) {
+            return aiResult.results
+                .slice()
+                .sort((a, b) => (b.matchPercent ?? 0) - (a.matchPercent ?? 0))
+                .map((x) => x.disease);
+        }
+
+        // fallback old logic (matchedDiseaseIds)
+        if (aiResult?.matchedDiseaseIds?.length) {
+            const setIds = new Set(aiResult.matchedDiseaseIds);
+            return diseases.filter((d) => setIds.has(d._id));
+        }
+
+        return diseases;
     }, [diseases, aiResult]);
 
     // ✅ reset page khi filter
@@ -144,9 +156,10 @@ export default function Disease() {
 
                 {/* Cards */}
                 <div className="mt-14 grid gap-10 md:grid-cols-3">
-                    {currentItems.map((item) => (
-                        <Card key={item._id} item={item} />
-                    ))}
+                    {currentItems.map((item) => {
+                        const mp = aiResult?.results?.find((r) => r.diseaseId === item._id)?.matchPercent;
+                        return <Card key={item._id} item={item} matchPercent={mp} />;
+                    })}
                 </div>
 
                 {/* Pagination */}

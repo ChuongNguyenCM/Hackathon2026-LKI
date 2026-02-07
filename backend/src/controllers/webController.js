@@ -1,6 +1,6 @@
 import Reservation from "../models/Reservation.js";
 import Disease from "../models/Disease.js";
-import { suggestDiseasesWithGemini } from "../services/geminiService.js";
+import { suggestDiseasesWithGeminiScored } from "../services/geminiService.js";
 
 function validateReservation(body) {
     const errors = {};
@@ -85,6 +85,7 @@ const getHome = (req, res) => {
 const askDiseaseAI = async (req, res) => {
     try {
         const userText = String(req.body?.text ?? "").trim();
+        const topK = Math.max(1, Math.min(Number(req.body?.topK ?? 6), 12));
 
         if (!userText) {
             return res.status(400).json({ EC: 1, EM: "Text is required", DT: null });
@@ -92,16 +93,44 @@ const askDiseaseAI = async (req, res) => {
 
         const diseases = await Disease.find().lean();
 
-        const ai = await suggestDiseasesWithGemini({ userText, diseases });
+        // Gemini scored matching
+        const ai = await suggestDiseasesWithGeminiScored({ userText, diseases, topK });
+
+        // Map results -> include full disease objects
+        const diseaseMap = new Map(diseases.map((d) => [String(d._id), d]));
+
+        const results = (ai.matches || [])
+            .map((m) => {
+                const doc = diseaseMap.get(String(m.id));
+                if (!doc) return null;
+                return {
+                    diseaseId: String(m.id),
+                    matchPercent: m.matchPercent,
+                    why: m.why,
+                    disease: doc, // ✅ full data
+                };
+            })
+            .filter(Boolean)
+            .sort((a, b) => b.matchPercent - a.matchPercent);
+
+        // Keep backward compatibility for your current FE filter logic:
+        const matchedDiseaseIds = results.map((x) => x.diseaseId);
 
         return res.status(200).json({
             EC: 0,
             EM: "OK",
             DT: {
                 query: userText,
-                matchedDiseaseIds: ai.matchedDiseaseIds || [],
-                suggestions: ai.suggestions || [],
+
+                // old fields (so FE won't break)
+                matchedDiseaseIds,
+                suggestions: results.map((x) => ({ id: x.diseaseId, why: x.why })),
+
+                // new fields (for Match% + sorting)
+                results, // [{ diseaseId, matchPercent, why, disease }]
+
                 redFlags: ai.redFlags || [],
+                comments: ai.comments || [],
                 disclaimer: ai.disclaimer || "This is not a diagnosis.",
             },
         });

@@ -10,7 +10,7 @@ const badgeStyles = {
     emergency: "bg-red-200 text-red-900 border-red-300",
 };
 
-export default function Card({ item }) {
+export default function Card({ item, matchPercent }) {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -48,12 +48,23 @@ export default function Card({ item }) {
                             {item?.name}
                         </h3>
 
-                        <span
-                            className={`shrink-0 rounded-full border px-3 py-1 text-xs font-extrabold ${badgeClass}`}
-                            title="Urgency"
-                        >
-                            {item?.urgencyBadge}
-                        </span>
+                        <div className="shrink-0 flex flex-col items-end gap-2">
+                            <span
+                                className={`rounded-full border px-3 py-1 text-xs font-extrabold ${badgeClass}`}
+                                title="Urgency"
+                            >
+                                {item?.urgencyBadge}
+                            </span>
+
+                            {typeof matchPercent === "number" && (
+                                <span
+                                    className="rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-extrabold text-[#1E1E1E]"
+                                    title="AI match"
+                                >
+                                    Match {matchPercent}%
+                                </span>
+                            )}
+                        </div>
                     </div>
 
                     <p className="mt-4 leading-7 text-[#485E57] line-clamp-3">

@@ -20,5 +20,5 @@ export {
     createReservation,
     getDisease,
     getHome,
-    askDiseaseAI
+    askDiseaseAI,
 }
