@@ -4,6 +4,7 @@ import Field from "./Field";
 import Input from "./Input";
 import Select from "./Select";
 import { toast } from "react-toastify";
+import { createReservation } from "../../services/webService";
 
 const initialForm = {
     firstName: "",
@@ -52,7 +53,7 @@ export default function ReservationForm() {
         setErrors((prev) => ({ ...prev, [key]: liveErrors[key] }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const eObj = validate(form);
@@ -70,7 +71,11 @@ export default function ReservationForm() {
         if (Object.keys(eObj).length > 0) return;
 
         try {
+            const res = await createReservation(form);
+
             toast?.success?.("Reservation created!");
+            console.log("Created reservation:", res);
+
             setForm(initialForm);
             setTouched({});
             setErrors({});
