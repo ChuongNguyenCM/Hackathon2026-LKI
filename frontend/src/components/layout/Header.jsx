@@ -8,15 +8,15 @@ const Header = () => {
     const [open, setOpen] = useState(false);
 
     const navClass = ({ isActive }) =>
-        `font-semibold text-[#485E57] hover:text-[#2F3F3A] transition hover:cursor-pointer ${isActive ? "underline underline-offset-8" : ""
+        `font-semibold text-[#007BFF] hover:text-[#005FCC] transition hover:cursor-pointer ${isActive ? "underline underline-offset-8" : ""
         }`;
 
     const mobileNavClass = ({ isActive }) =>
-        `block rounded-md px-3 py-2 hover:cursor-pointer font-semibold text-[#485E57] hover:bg-gray-100 hover:text-[#2F3F3A] transition ${isActive ? "bg-gray-200" : ""
+        `block rounded-md px-3 py-2 hover:cursor-pointer font-semibold text-[#007BFF] hover:bg-gray-100 hover:text-[#005FCC] transition ${isActive ? "bg-gray-200" : ""
         }`;
 
     return (
-        <header className="w-full bg-[#F2F2F2]">
+        <header className="w-full bg-[#FFFFFF]">
             <div className="mx-auto flex max-w-6xl items-center justify-between px-6">
                 <Link to="/" className="flex shrink-0 items-center">
                     <img src={logo} alt="Logo" className="w-50 h-auto object-contain" />
@@ -37,7 +37,7 @@ const Header = () => {
 
                 {/* Mobile hamburger */}
                 <button
-                    className="rounded-md p-2 text-[#485E57] transition hover:bg-gray-200 sm:hidden"
+                    className="rounded-md p-2 text-[#007BFF] transition hover:bg-gray-200 sm:hidden"
                     onClick={() => setOpen((s) => !s)}
                     aria-label="Toggle menu"
                     aria-expanded={open}

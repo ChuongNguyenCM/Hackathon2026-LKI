@@ -66,7 +66,7 @@ export default function Footer() {
                                         <li key={link.label}>
                                             <a
                                                 href={link.href}
-                                                className="inline-flex items-center rounded text-sm font-semibold text-[#5A6B7A ]/90 underline decoration-transparent underline-offset-4 hover:text-[#005FCC ] hover:decoration-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-[##E2E8F0]/40"
+                                                className="inline-flex items-center rounded text-sm font-semibold text-[#5A6B7A ]/90 underline decoration-transparent underline-offset-4 hover:text-[#005FCC ] hover:decoration-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[##E2E8F0]/40"
                                             >
                                                 {link.label}
                                             </a>

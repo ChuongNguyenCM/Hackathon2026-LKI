@@ -1,9 +1,15 @@
-import React from 'react'
+import Hero from "./sections/Hero";
+import About from "./sections/About";
+import Testimonials from "./sections/Testimonial";
 
-const Home = () => {
+
+export default function Home() {
+
     return (
-        <div>Home</div>
-    )
+        <main>
+            <Hero />
+            <About />
+            <Testimonials />
+        </main>
+    );
 }
-
-export default Home
