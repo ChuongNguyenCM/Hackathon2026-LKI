@@ -63,7 +63,25 @@ const getDisease = async (req, res) => {
     }
 }
 
+const getHome = (req, res) => {
+    try {
+        return res.status(200).json({
+            EM: "OK",
+            EC: 0,
+            DT: []
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: error.message || "Can't get home",
+            EC: 1,
+            DT: []
+        });
+    }
+};
+
 export {
     getDisease,
-    handleReservation
+    handleReservation,
+    getHome
 }

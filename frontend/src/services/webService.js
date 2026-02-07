@@ -8,7 +8,12 @@ const getDisease = () => {
     return axios.get("/api/diseases");
 };
 
+const getHome = async () => {
+    return axios.get("/api/home");
+}
+
 export {
     createReservation,
-    getDisease
+    getDisease,
+    getHome
 }
