@@ -2,11 +2,15 @@ import Card from "../../components/ui/Card";
 import { useEffect, useMemo, useState } from "react";
 import { askDiseaseAI, getDisease } from "../../services/webService";
 
+const PAGE_SIZE = 6;
+
 export default function Disease() {
     const [diseases, setDiseases] = useState([]);
     const [inputText, setInputText] = useState("");
     const [loadingAI, setLoadingAI] = useState(false);
     const [aiResult, setAiResult] = useState(null);
+
+    const [page, setPage] = useState(1);
 
     const fetchDiseases = async () => {
         try {
@@ -21,11 +25,30 @@ export default function Disease() {
         fetchDiseases();
     }, []);
 
+    // Filter
     const visibleDiseases = useMemo(() => {
         if (!aiResult?.matchedDiseaseIds?.length) return diseases;
         const setIds = new Set(aiResult.matchedDiseaseIds);
         return diseases.filter((d) => setIds.has(d._id));
     }, [diseases, aiResult]);
+
+    // ✅ reset page khi filter
+    useEffect(() => {
+        setPage(1);
+    }, [aiResult, diseases.length]);
+
+    // ✅ Pagination calc
+    const totalPages = Math.max(1, Math.ceil(visibleDiseases.length / PAGE_SIZE));
+
+    // clamp page nếu data đổi
+    useEffect(() => {
+        if (page > totalPages) setPage(totalPages);
+    }, [page, totalPages]);
+
+    const currentItems = useMemo(() => {
+        const start = (page - 1) * PAGE_SIZE;
+        return visibleDiseases.slice(start, start + PAGE_SIZE);
+    }, [visibleDiseases, page]);
 
     const onAskAI = async () => {
         try {
@@ -53,14 +76,11 @@ export default function Disease() {
     return (
         <section className="w-full bg-[#F2F2F2]">
             <div className="mx-auto max-w-5xl px-6 py-20">
-                {/* Header */}
                 <div className="flex items-center justify-center gap-6">
-                    <h2 className="text-5xl font-black tracking-tight text-[#1E1E1E]">
-                        Diseases
-                    </h2>
+                    <h2 className="text-5xl font-black tracking-tight text-[#1E1E1E]">Diseases List</h2>
                 </div>
 
-                {/* ✅ AI bar */}
+                {/* AI bar */}
                 <div className="mt-10 rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
                     <div className="flex flex-col gap-3 md:flex-row md:items-center">
                         <input
@@ -92,12 +112,9 @@ export default function Disease() {
                         </div>
                     </div>
 
-                    {/* ✅ AI output */}
                     {aiResult && (
                         <div className="mt-4 rounded-xl bg-[#F2F2F2] p-4">
-                            <p className="text-sm font-extrabold text-[#1E1E1E]">
-                                AI Suggestions
-                            </p>
+                            <p className="text-sm font-extrabold text-[#1E1E1E]">AI Suggestions</p>
 
                             {aiResult.redFlags?.length > 0 && (
                                 <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3">
@@ -110,16 +127,13 @@ export default function Disease() {
                                 </div>
                             )}
 
-                            <div className="mt-3">
-                                <ul className="space-y-2 text-sm text-[#485E57]">
-                                    {(aiResult.suggestions || []).map((s) => (
-                                        <li key={s.id} className="leading-6">
-                                            <span className="font-extrabold text-[#1E1E1E]">{s.id}:</span>{" "}
-                                            {s.why}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            <ul className="mt-3 space-y-2 text-sm text-[#485E57]">
+                                {(aiResult.suggestions || []).map((s) => (
+                                    <li key={s.id} className="leading-6">
+                                        <span className="font-extrabold text-[#1E1E1E]">{s.id}:</span> {s.why}
+                                    </li>
+                                ))}
+                            </ul>
 
                             <p className="mt-3 text-xs text-[#485E57]">
                                 {aiResult.disclaimer || "This is not a diagnosis."}
@@ -130,16 +144,59 @@ export default function Disease() {
 
                 {/* Cards */}
                 <div className="mt-14 grid gap-10 md:grid-cols-3">
-                    {visibleDiseases.map((item) => (
+                    {currentItems.map((item) => (
                         <Card key={item._id} item={item} />
                     ))}
                 </div>
 
-                {aiResult?.matchedDiseaseIds?.length === 0 && aiResult && (
-                    <p className="mt-8 text-center text-sm text-[#485E57]">
-                        No matches found. Try adding more details (discharge type, pain level, contact lens use).
-                    </p>
-                )}
+                {/* Pagination */}
+                <div className="mt-10 flex items-center justify-center gap-3">
+                    <button
+                        type="button"
+                        disabled={page === 1}
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        className="rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-extrabold disabled:opacity-40 hover:bg-black/5"
+                    >
+                        Prev
+                    </button>
+
+                    {/* Page numbers */}
+                    <div className="flex items-center gap-2">
+                        {Array.from({ length: totalPages }).map((_, idx) => {
+                            const p = idx + 1;
+                            const active = p === page;
+                            return (
+                                <button
+                                    key={p}
+                                    type="button"
+                                    onClick={() => setPage(p)}
+                                    className={
+                                        active
+                                            ? "rounded-xl bg-black px-4 py-2 text-sm font-extrabold text-white"
+                                            : "rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-extrabold hover:bg-black/5"
+                                    }
+                                >
+                                    {p}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <button
+                        type="button"
+                        disabled={page === totalPages}
+                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                        className="rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-extrabold disabled:opacity-40 hover:bg-black/5"
+                    >
+                        Next
+                    </button>
+                </div>
+
+                {/* Optional info */}
+                <p className="mt-4 text-center text-xs text-[#485E57]">
+                    Showing {(page - 1) * PAGE_SIZE + 1}–
+                    {Math.min(page * PAGE_SIZE, visibleDiseases.length)} of {visibleDiseases.length}
+                </p>
             </div>
         </section>
     );

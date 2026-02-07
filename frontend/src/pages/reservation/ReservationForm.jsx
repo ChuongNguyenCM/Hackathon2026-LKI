@@ -17,16 +17,29 @@ const initialForm = {
 
 function validate(values) {
     const e = {};
+    const nameRegex = /^[A-Za-z\s]+$/;
 
     const firstName = (values.firstName ?? "").trim();
     const lastName = (values.lastName ?? "").trim();
     const phoneNumber = (values.phoneNumber ?? "").trim();
     const email = (values.email ?? "").trim();
+    const date = (values.date ?? "").trim();
+    const time = (values.time ?? "").trim();
 
     if (!firstName) e.firstName = "First name is required";
+    else if (!nameRegex.test(firstName)) e.firstName = "Only letters and spaces";
+
     if (!lastName) e.lastName = "Last name is required";
+    else if (!nameRegex.test(lastName)) e.lastName = "Only letters and spaces";
+
     if (!phoneNumber) e.phoneNumber = "Phone number is required";
+    else if (!/^[0-9+\-\s()]{7,20}$/.test(phoneNumber)) e.phoneNumber = "Phone number is invalid";
+
     if (!email) e.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = "Email is invalid";
+
+    if (!date) e.date = "Please choose a date";
+    if (!time) e.time = "Please choose a time";
 
     return e;
 }
@@ -40,12 +53,17 @@ export default function ReservationForm() {
 
     const update = (key) => (e) => {
         const value = e.target.value;
-        setForm((prev) => ({ ...prev, [key]: value }));
 
-        if (touched[key]) {
-            const nextErrors = validate({ ...form, [key]: value });
-            setErrors((prev) => ({ ...prev, [key]: nextErrors[key] }));
-        }
+        setForm((prev) => {
+            const nextForm = { ...prev, [key]: value };
+
+            if (touched[key]) {
+                const nextErrors = validate(nextForm);
+                setErrors((prevErr) => ({ ...prevErr, [key]: nextErrors[key] }));
+            }
+
+            return nextForm;
+        });
     };
 
     const markTouched = (key) => () => {
@@ -80,8 +98,25 @@ export default function ReservationForm() {
             setTouched({});
             setErrors({});
         } catch (err) {
-            console.log(err);
-            toast?.error?.(err?.response?.data?.message || "Create reservation failed");
+            const data = err?.response?.data;
+            const serverErrors = data?.DT;
+
+            if (data?.EC === 1 && serverErrors && typeof serverErrors === "object") {
+                setErrors(serverErrors);
+                setTouched({
+                    firstName: true,
+                    lastName: true,
+                    phoneNumber: true,
+                    email: true,
+                    date: true,
+                    time: true,
+                });
+
+                toast?.error?.(data?.EM || "Validation error");
+                return;
+            }
+
+            toast?.error?.(data?.EM || err?.message || "Create reservation failed");
         }
     };
 
