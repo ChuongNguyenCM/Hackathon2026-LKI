@@ -144,5 +144,5 @@ export {
     getDisease,
     handleReservation,
     getHome,
-    askDiseaseAI
+    askDiseaseAI,
 }
