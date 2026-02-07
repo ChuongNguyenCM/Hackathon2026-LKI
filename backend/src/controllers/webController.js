@@ -1,4 +1,5 @@
 import Reservation from "../models/Reservation.js";
+import Disease from "../models/Disease.js";
 
 function validateReservation(body) {
     const errors = {};
@@ -29,7 +30,7 @@ function validateReservation(body) {
     return errors;
 }
 
-export const handleReservation = async (req, res) => {
+const handleReservation = async (req, res) => {
     try {
         const errors = validateReservation(req.body);
         if (Object.keys(errors).length) {
@@ -51,3 +52,18 @@ export const handleReservation = async (req, res) => {
         return res.status(500).json({ EC: -1, EM: err.message || "Server error", DT: null });
     }
 };
+
+const getDisease = async (req, res) => {
+    try {
+        const docs = await Disease.find().lean();
+        return res.status(200).json({ EC: 0, EM: "OK", DT: docs });
+    } catch (err) {
+        console.error("getAllDiseases error:", err);
+        return res.status(500).json({ EC: -1, EM: "Server error", DT: null });
+    }
+}
+
+export {
+    getDisease,
+    handleReservation
+}
