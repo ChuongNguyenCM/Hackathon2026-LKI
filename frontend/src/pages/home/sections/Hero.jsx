@@ -12,7 +12,7 @@ export default function Hero() {
                     <h1 className="text-5xl font-extrabold text-[#F4CE14] md:text-6xl">
                         MediSearch
                     </h1>
-                    <h3 className="mt-2 text-2xl font-bold text-white md:text-3xl">Ohio</h3>
+                    <h3 className="mt-2 text-2xl font-bold text-white md:text-3xl">Fairborn, Ohio</h3>
 
                     <p className="mt-6 max-w-md text-lg leading-8 text-white/80">
                         Where Medical Insight Meets Vision

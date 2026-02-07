@@ -12,8 +12,13 @@ const getHome = async () => {
     return axios.get("/api/home");
 }
 
+const askDiseaseAI = (text) => {
+    return axios.post("/api/ai/disease-suggest", { text });
+};
+
 export {
     createReservation,
     getDisease,
-    getHome
+    getHome,
+    askDiseaseAI
 }

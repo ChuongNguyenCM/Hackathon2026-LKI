@@ -7,7 +7,7 @@ import { connectDB } from "./config/database.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3636;
+const PORT = process.env.PORT || 8080;
 
 // middleware
 app.use(express.json());
@@ -21,7 +21,7 @@ app.use(cors({
 webRoutes(app);
 
 connectDB().then(() => {
-    app.listen(PORT || 3636, () => {
+    app.listen(PORT, () => {
         console.log("Run success at " + PORT);
     })
 });

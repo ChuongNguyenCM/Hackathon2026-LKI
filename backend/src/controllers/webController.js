@@ -1,5 +1,6 @@
 import Reservation from "../models/Reservation.js";
 import Disease from "../models/Disease.js";
+import { suggestDiseasesWithGemini } from "../services/geminiService.js";
 
 function validateReservation(body) {
     const errors = {};
@@ -80,8 +81,39 @@ const getHome = (req, res) => {
     }
 };
 
+
+const askDiseaseAI = async (req, res) => {
+    try {
+        const userText = String(req.body?.text ?? "").trim();
+
+        if (!userText) {
+            return res.status(400).json({ EC: 1, EM: "Text is required", DT: null });
+        }
+
+        const diseases = await Disease.find().lean();
+
+        const ai = await suggestDiseasesWithGemini({ userText, diseases });
+
+        return res.status(200).json({
+            EC: 0,
+            EM: "OK",
+            DT: {
+                query: userText,
+                matchedDiseaseIds: ai.matchedDiseaseIds || [],
+                suggestions: ai.suggestions || [],
+                redFlags: ai.redFlags || [],
+                disclaimer: ai.disclaimer || "This is not a diagnosis.",
+            },
+        });
+    } catch (err) {
+        console.error("askDiseaseAI error:", err);
+        return res.status(500).json({ EC: -1, EM: err.message || "Server error", DT: null });
+    }
+};
+
 export {
     getDisease,
     handleReservation,
-    getHome
+    getHome,
+    askDiseaseAI
 }

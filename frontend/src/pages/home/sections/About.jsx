@@ -9,7 +9,7 @@ export default function About() {
                     <h2 className="text-5xl font-black tracking-tight text-[#157FCB]">
                         MediSearch
                     </h2>
-                    <p className="mt-2 text-3xl font-black text-[#1E1E1E]">Ohio</p>
+                    <p className="mt-2 text-3xl font-black text-[#1E1E1E]">About us</p>
 
                     <p className="mt-8 max-w-prose leading-8 text-[#1E1E1E]/70">
                         MediSearch is a user-friendly health website designed with a clean interface that is easy to navigate for everyone, from tech-savvy youth to seniors. Powered by advanced AI, the platform quickly analyzes your symptoms to provide precise and understandable medical explanations. Unlike general search engines, it ensures maximum reliability by sourcing information exclusively from trusted scientific databases and clinical journals. Every answer comes with direct citations, giving you peace of mind regarding the accuracy of your health data. It is a safe, professional, and English-optimized tool for anyone seeking credible medical insights. Experience the future of healthcare research where simplicity meets scientific integrity.
