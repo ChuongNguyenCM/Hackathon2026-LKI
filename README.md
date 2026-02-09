@@ -2,6 +2,23 @@
 
 A full-stack web app for eye-related health information: browse conditions, get AI-powered symptom suggestions, and make reservations.
 
+## About us
+
+We are a team of passionate CS and CE students from Wright State University who love turning ideas into real products. We enjoy tackling challenging problems, experimenting with new technologies, and learning from both success and failure. More than just writing code, we value teamwork, creativity, and the ability to build solutions that matter to real people. This hackathon is not just a competition for us — it’s an opportunity to grow, collaborate, and push our technical boundaries together.
+
+- **Phong Xuan Thanh Nguyen**:
+  - Contact: nguyen.345@wright.edu
+  - Role: Team Lead
+- **Gia Huy Tran**:
+  - Contact: tran.124@wright.edu
+  - Role: Designer
+- **Hoang Chuong Nguyen**:
+  - Contact: nguyen.328@wright.edu
+  - Role: Lead Full-Stack Engineer
+- **Duy Bao Nguyen**:
+  - Contact: nguyen.382@wright.edu
+  - Role: Associate Full-Stack Engineer
+
 ## Features
 
 - **Home** – Landing page with hero, about, and testimonials

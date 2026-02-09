@@ -59,7 +59,11 @@ export default function Disease() {
 
     const currentItems = useMemo(() => {
         const start = (page - 1) * PAGE_SIZE;
-        return visibleDiseases.slice(start, start + PAGE_SIZE);
+        const items = visibleDiseases.slice(start, start + PAGE_SIZE);
+        // #region agent log
+        fetch('http://localhost:8080/api/debug-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'Disease.jsx:currentItems', message: 'pagination', data: { visibleLen: visibleDiseases.length, page, currentLen: items.length }, timestamp: Date.now(), hypothesisId: 'D' }) }).catch(() => { });
+        // #endregion
+        return items;
     }, [visibleDiseases, page]);
 
     const onAskAI = async () => {
@@ -68,6 +72,13 @@ export default function Disease() {
             setAiResult(null);
 
             const res = await askDiseaseAI(inputText);
+            // #region agent log
+            if (res?.EC === 0 && res?.DT) {
+                const dt = res.DT;
+                const firstResult = Array.isArray(dt.results) && dt.results[0];
+                fetch('http://localhost:8080/api/debug-log', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'Disease.jsx:onAskAI', message: 'AI result shape', data: { resultsLen: dt.results?.length, firstDiseaseId: firstResult?.diseaseId, firstDisease_id: firstResult?.disease?._id, idsEqual: firstResult ? String(firstResult.diseaseId) === String(firstResult.disease?._id) : null }, timestamp: Date.now(), hypothesisId: 'C' }) }).catch(() => { });
+            }
+            // #endregion
             if (res.EC === 0) setAiResult(res.DT);
         } catch (err) {
             console.error("askDiseaseAI error:", err);
